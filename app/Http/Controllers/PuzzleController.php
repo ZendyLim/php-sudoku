@@ -52,13 +52,8 @@ class PuzzleController extends Controller
     $errors = SudokuHelpers::isSolved($board);
 
     if (sizeof($errors) < 1) {
-      $puzzle = Puzzle::create([
-        'puzzle' => $request->get('board')
-      ]);
-
       return response()->json([
-        'success' => true,
-        'id' => $puzzle->id
+        'success' => true
       ]);
     }
 
