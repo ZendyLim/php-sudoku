@@ -13,6 +13,6 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::post('/checkSolvableAndSave', 'PuzzleController@checkSolvableAndSave');
+Route::get('/getPuzzles', 'PuzzleController@getPuzzles');
+Route::get('/getPuzzle/{id}', 'PuzzleController@getPuzzle');
