@@ -14,5 +14,7 @@ use Illuminate\Http\Request;
 */
 
 Route::post('/checkSolvableAndSave', 'PuzzleController@checkSolvableAndSave');
+Route::post('/checkSolved', 'PuzzleController@checkSolved');
 Route::get('/getPuzzles', 'PuzzleController@getPuzzles');
 Route::get('/getPuzzle/{id}', 'PuzzleController@getPuzzle');
+Route::post('/solvePuzzle', 'PuzzleController@solvePuzzle');

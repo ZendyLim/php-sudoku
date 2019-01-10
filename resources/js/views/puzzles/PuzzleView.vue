@@ -1,6 +1,7 @@
 <template>
   <v-container fluid>
-    <table>
+    <v-progress-circular v-if="loading" indeterminate/>
+    <table v-else>
       <tbody>
       <tr v-for="i in 9">
         <td v-for="(column, j) in board.slice((i - 1) * 9, i * 9)">
@@ -14,7 +15,11 @@
       </tr>
       </tbody>
     </table>
-    <v-btn @click="">Check</v-btn>
+    <v-btn @click="callCheckAPI">Check</v-btn>
+    <v-btn @click="callSolveAPI">Solve</v-btn>
+    <v-snackbar v-model="snackbar">
+      Congratulations!
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -37,24 +42,99 @@
         data.map((row, i) => {
           row.map((col, j) => {
             let section = 1;
-            for (let x = 0; x < Math.ceil(i / 3); x++) {
-              section += 3;
-            }
+            if (i > 2) section += 3;
+            if (i > 5) section += 3;
 
-            for (let x = 0; x < Math.ceil(j / 3); x++) {
-              section++;
-            }
+            if (j > 2) section++;
+            if (j > 5) section++;
 
-            board.push({error: false, readonly: col !== null, value: col, row: i, col: j, section: section});
+            board.push({error: false, readonly: col !== null, value: col, row: i + 1, col: j + 1, section: section});
           });
         });
 
         self.board = board;
+        self.loading = false;
       });
+    },
+    methods: {
+      resetError() {
+        this.board.map((col) => {
+          col.error = false;
+        });
+      },
+      changeBoardValue(index, value) {
+        console.log(index);
+        this.board[index].value = value;
+      },
+      callCheckAPI() {
+        this.resetError();
+        const board = this.board.map((col) => {
+          if (!col.value) {
+            return null;
+          } else {
+            return +col.value;
+          }
+        });
+        const rowBasedBoard = [];
+
+        while (board.length > 0) {
+          rowBasedBoard.push(board.splice(0, 9));
+        }
+
+        const form = new FormData();
+        form.set('board', JSON.stringify(rowBasedBoard));
+
+        const self = this;
+
+        axios.post('/api/checkSolved', form).then((response) => {
+          if (response.data.success === false) {
+            response.data.errors.map((error) => {
+              self.board[(error[0] * 9) + error[1]].error = true;
+            });
+          } else {
+            self.snackbar = true;
+          }
+        }).catch((error) => {
+          console.error(error);
+        });
+      },
+      callSolveAPI() {
+        this.resetError();
+        const board = this.board.map((col) => {
+          if (!col.value) {
+            return null;
+          } else {
+            return +col.value;
+          }
+        });
+        const rowBasedBoard = [];
+
+        while (board.length > 0) {
+          rowBasedBoard.push(board.splice(0, 9));
+        }
+
+        const form = new FormData();
+        form.set('board', JSON.stringify(rowBasedBoard));
+
+        const self = this;
+
+        axios.post('/api/solvePuzzle', form).then((response) => {
+          let index = 0;
+          response.data.map((row) => {
+            row.map((col) => {
+              self.board[index++].value = col;
+            })
+          });
+        }).catch((error) => {
+          console.error(error);
+        });
+      }
     },
     data() {
       return {
-        board: null
+        loading: true,
+        snackbar: false,
+        board: []
       };
     }
   };

@@ -15,6 +15,9 @@
       value(val) {
         this.$emit('input', val);
       },
+      val(val) {
+        this.value = val;
+      }
     }
   };
 </script>

@@ -119,4 +119,29 @@ class SudokuHelpers
 
     return $errors;
   }
+
+  public static function solve(&$board){
+    for ($row = 0; $row < 9; $row++) {
+      for ($col = 0; $col < 9; $col++) {
+        if (is_null($board[$row][$col])) {
+          for ($number = 1; $number <= 9; $number++) {
+            if (self::isValid($board, $row, $col, $number, false)) {
+
+              $board[$row][$col] = $number;
+
+              if (self::solve($board)) {
+                return true;
+              } else {
+                $board[$row][$col] = null;
+              }
+            }
+          }
+
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
 }

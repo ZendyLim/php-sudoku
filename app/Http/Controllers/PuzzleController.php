@@ -12,8 +12,6 @@ class PuzzleController extends Controller
   {
     $board = json_decode($request->get('board'));
 
-    \Log::info($board);
-
     $errors = SudokuHelpers::isSolvable($board);
 
     if (sizeof($errors) < 1) {
@@ -45,5 +43,37 @@ class PuzzleController extends Controller
     $puzzle = Puzzle::findOrFail($id);
 
     return response()->json($puzzle);
+  }
+
+  public function checkSolved(Request $request)
+  {
+    $board = json_decode($request->get('board'));
+
+    $errors = SudokuHelpers::isSolved($board);
+
+    if (sizeof($errors) < 1) {
+      $puzzle = Puzzle::create([
+        'puzzle' => $request->get('board')
+      ]);
+
+      return response()->json([
+        'success' => true,
+        'id' => $puzzle->id
+      ]);
+    }
+
+    return response()->json([
+      'success' => false,
+      'errors' => $errors
+    ]);
+  }
+
+  public function solvePuzzle(Request $request)
+  {
+    $board = json_decode($request->get('board'));
+
+    SudokuHelpers::solve($board);
+
+    return response()->json($board);
   }
 }

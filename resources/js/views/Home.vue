@@ -1,6 +1,6 @@
 <template>
   <v-container fill-height>
-    Hello
+    <h1>Welcome!</h1>
   </v-container>
 </template>
 
