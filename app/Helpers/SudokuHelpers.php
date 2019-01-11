@@ -11,14 +11,19 @@ namespace App\Helpers;
 
 class SudokuHelpers
 {
+  private static function isInteger($val)
+  {
+    return !(is_numeric($val) && floor($val) != $val);
+  }
+
   private static function isValidNumber($number, $allow_null)
   {
     $is_null = is_null($number);
 
     if ($allow_null) {
-      return $number <= 9 && $number > 0;
+      return $number <= 9 && $number > 0 && self::isInteger($number);
     }
-    return !$is_null && $number <= 9 && $number > 0;
+    return !$is_null && $number <= 9 && $number > 0 && self::isInteger($number);
   }
 
   public static function getSolvedPuzzle($board)
@@ -120,7 +125,8 @@ class SudokuHelpers
     return $errors;
   }
 
-  public static function solve(&$board){
+  public static function solve(&$board)
+  {
     for ($row = 0; $row < 9; $row++) {
       for ($col = 0; $col < 9; $col++) {
         if (is_null($board[$row][$col])) {
