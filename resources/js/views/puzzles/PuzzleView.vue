@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-progress-circular v-if="loading" indeterminate/>
-    <table v-else>
+    <table cellspacing="0" v-else>
       <tbody>
       <tr v-for="i in 9">
         <td v-for="(column, j) in board.slice((i - 1) * 9, i * 9)">
@@ -123,7 +123,7 @@
           response.data.map((row) => {
             row.map((col) => {
               self.board[index++].value = col;
-            })
+            });
           });
         }).catch((error) => {
           console.error(error);
@@ -140,6 +140,17 @@
   };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+  table {
+    border: 2px solid black;
+  }
+  tr:nth-child(3), tr:nth-child(6) {
+    td {
+      border-bottom: 2px solid black;
+    }
+  }
 
+  td:nth-child(3), td:nth-child(6) {
+    border-right: 2px solid black;
+  }
 </style>

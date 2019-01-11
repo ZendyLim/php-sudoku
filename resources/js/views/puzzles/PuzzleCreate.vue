@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <table>
+    <table cellspacing="0">
       <tbody>
       <tr v-for="i in 9">
         <td v-for="(column, j) in board.slice((i - 1) * 9, i * 9)">
@@ -182,6 +182,18 @@
   };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+  table {
+    border: 2px solid black;
+  }
 
+  tr:nth-child(3), tr:nth-child(6) {
+    td {
+      border-bottom: 2px solid black;
+    }
+  }
+
+  td:nth-child(3), td:nth-child(6) {
+    border-right: 2px solid black;
+  }
 </style>
