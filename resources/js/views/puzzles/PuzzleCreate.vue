@@ -187,6 +187,13 @@
     border: 2px solid black;
   }
 
+
+  td {
+    input {
+      margin: 1px;
+    }
+  }
+
   tr:nth-child(3), tr:nth-child(6) {
     td {
       border-bottom: 2px solid black;

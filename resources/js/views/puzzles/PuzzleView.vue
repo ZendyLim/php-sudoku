@@ -150,6 +150,12 @@
     }
   }
 
+  td {
+    input {
+      margin: 1px;
+    }
+  }
+
   td:nth-child(3), td:nth-child(6) {
     border-right: 2px solid black;
   }
